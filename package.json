@@ -7,7 +7,9 @@
     "install:client": "cd client && npm install",
     "install:all": "npm run install:server && npm run install:client",
     "server": "cd server && npm run dev",
-    "client": "cd client && npm run dev"
+    "client": "cd client && npm run dev",
+    "start": "cd server && npm start",
+    "build": "cd client && npm run build"
   },
   "keywords": ["react", "express", "mongodb", "mongoose", "jwt", "custom-css", "wad-project"],
   "author": "WAD Student",

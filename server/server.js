@@ -30,10 +30,14 @@ const app = express();
 // Middleware Setup
 // ==========================================
 
-// Enable CORS for all incoming origins (allows React client to communicate with backend)
+// CORS Setup - Allows frontend domain or development localhost
+const allowedOrigins = process.env.CLIENT_URL
+  ? [process.env.CLIENT_URL.replace(/\/$/, ''), 'http://localhost:5173', 'http://localhost:3000']
+  : '*';
+
 app.use(
   cors({
-    origin: '*', // For development, allow all origins. Can be locked to client URL in prod
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })

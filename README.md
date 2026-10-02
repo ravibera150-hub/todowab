@@ -99,45 +99,67 @@ WAD/
 
 ### Prerequisites
 - **Node.js** (v18 or newer installed)
-- **MongoDB** *(Optional)* — The server automatically uses a local JSON file database fallback (`server/data/store.json`) if MongoDB is not running locally.
+- **MongoDB Atlas Connection** — A free MongoDB Atlas Cloud Database URI configured in `server/.env` as `MONGO_URI`.
 
 ---
 
-### Step 1: Start the Backend Server
+## 🌐 Cloud Deployment Guide (MongoDB Atlas + Render / Vercel)
 
-1. Open a terminal and navigate to the `server/` directory:
-   ```bash
-   cd server
-   ```
-2. Install dependencies *(if not already installed)*:
-   ```bash
-   npm install
-   ```
-3. Start the Express server:
-   ```bash
-   npm run dev
-   # or
-   npm start
-   ```
-4. The server will run at `http://localhost:5000`.
+### Step 1: Create a Free MongoDB Atlas Cloud Database
+1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and sign up for a free account.
+2. Create a new **Free (M0) Cluster**.
+3. Navigate to **Security -> Database Access**:
+   - Click **Add New Database User**.
+   - Set a username and password (e.g. `wad_user` and `secure_password123`).
+4. Navigate to **Security -> Network Access**:
+   - Click **Add IP Address** -> Select **Allow Access from Anywhere** (`0.0.0.0/0`).
+5. Navigate to **Database -> Connect**:
+   - Choose **Drivers** (Node.js).
+   - Copy your connection string:
+     ```text
+     mongodb+srv://<username>:<password>@cluster0.xxxx.mongodb.net/wad_todolist?retryWrites=true&w=majority
+     ```
 
 ---
 
-### Step 2: Start the Frontend Client
+### Step 2: Deploy Backend to Render / Railway
+1. Push your repository to GitHub.
+2. Log into [Render](https://render.com) and create a **New Web Service** linked to your repository.
+3. Set the Root Directory to `server` (or keep root).
+4. Configure Build & Start Commands:
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+5. Add **Environment Variables** in the Render Dashboard:
+   - `MONGO_URI`: `mongodb+srv://<username>:<password>@cluster0.xxxx.mongodb.net/wad_todolist?retryWrites=true&w=majority`
+   - `PORT`: `5000`
+   - `JWT_SECRET`: `your_secure_jwt_secret_key`
+   - `CLIENT_URL`: `https://your-frontend-domain.vercel.app`
+6. Click **Deploy**. Copy your live backend URL (e.g., `https://wad-todolist-api.onrender.com`).
 
-1. Open a **second terminal** and navigate to the `client/` directory:
+---
+
+### Step 3: Deploy Frontend to Vercel / Netlify
+1. Log into [Vercel](https://vercel.com) and import your GitHub repository.
+2. Set Root Directory to `client`.
+3. Framework Preset: **Vite**.
+4. Configure **Environment Variables**:
+   - `VITE_API_URL`: `https://wad-todolist-api.onrender.com`
+5. Click **Deploy**.
+6. **Verify Data Persistence:** Log into your deployed web app, create/update/delete tasks, refresh the browser, and restart the backend. All data persists permanently in MongoDB Atlas!
+
+---
+
+### Step 4: Local Development Setup
+1. Copy `.env.example` to `server/.env` and update `MONGO_URI` with your MongoDB Atlas string or local MongoDB URI.
+2. Start backend server:
    ```bash
-   cd client
+   cd server && npm install && npm run dev
    ```
-2. Install dependencies *(if not already installed)*:
+3. In a second terminal, start client app:
    ```bash
-   npm install
+   cd client && npm install && npm run dev
    ```
-3. Start the Vite development server:
-   ```bash
-   npm run dev
-   ```
-4. Open your browser and visit: **`http://localhost:5173`**
+4. Open your browser at `http://localhost:5173`.
 
 ---
 
