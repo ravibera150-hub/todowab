@@ -9,8 +9,8 @@
     "server": "cd server && npm run dev",
     "client": "cd client && npm run dev",
     "start": "cd server && npm start",
-    "build": "cd client && npx vite build",
-    "vercel-build": "cd client && npx vite build",
+    "build": "cd client && npx vite build --outDir ../dist",
+    "vercel-build": "cd client && npx vite build --outDir ../dist",
     "postinstall": "cd client && npm install"
   },
   "keywords": ["react", "express", "mongodb", "mongoose", "jwt", "custom-css", "wad-project"],
