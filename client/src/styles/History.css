@@ -1,0 +1,200 @@
+/* ==========================================================================
+   TaskFlow History View Styles (styles/History.css)
+   ========================================================================== */
+
+.history-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+}
+
+/* History Date Picker Sidebar / Selector */
+.history-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.history-picker-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.history-picker-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.date-input-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.date-picker-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.date-picker-input:focus {
+  outline: none;
+  border-color: var(--border-focus);
+}
+
+/* Past Days Quick List */
+.past-days-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.past-day-item {
+  padding: 0.85rem 1rem;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all var(--transition-fast);
+}
+
+.past-day-item:hover {
+  background-color: var(--bg-muted);
+  border-color: var(--border-strong);
+  transform: translateX(2px);
+}
+
+.past-day-item.active {
+  background-color: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.past-day-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.past-day-date {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.past-day-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.past-day-item.active .past-day-sub {
+  color: var(--primary);
+  opacity: 0.8;
+}
+
+/* History Details Area */
+.history-main-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.history-summary-header {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.history-date-heading h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.history-readonly-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  background-color: var(--bg-input);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.history-metrics-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.history-metric-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-input);
+  border-radius: var(--radius-md);
+  min-width: 80px;
+}
+
+.history-metric-val {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.history-metric-lbl {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* History Sections: Completed vs Missed */
+.history-section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.history-section-title.completed {
+  color: var(--success);
+}
+
+.history-section-title.incomplete {
+  color: var(--danger);
+}
+
+/* Responsive History */
+@media (max-width: 900px) {
+  .history-layout {
+    grid-template-columns: 1fr;
+  }
+}
