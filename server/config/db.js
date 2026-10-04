@@ -13,8 +13,11 @@ const connectDB = async () => {
 
   if (!mongoURI) {
     console.error('❌ FATAL ERROR: MONGO_URI environment variable is missing.');
-    console.error('👉 Please set MONGO_URI in your server/.env file or environment variables on Render/Railway/Vercel.');
-    process.exit(1);
+    console.error('👉 Please set MONGO_URI in your environment variables on Render/Railway/Vercel.');
+    if (!process.env.VERCEL) {
+      process.exit(1);
+    }
+    return;
   }
 
   try {
@@ -33,13 +36,14 @@ const connectDB = async () => {
         return;
       } catch (dnsError) {
         console.error(`❌ MongoDB Connection Error: ${dnsError.message}`);
-        process.exit(1);
+        if (!process.env.VERCEL) process.exit(1);
+        return;
       }
     }
 
     console.error(`❌ MongoDB Connection Error: ${firstError.message}`);
     console.error('👉 Please verify your MONGO_URI string, Atlas Network Access (0.0.0.0/0), and database user credentials.');
-    process.exit(1);
+    if (!process.env.VERCEL) process.exit(1);
   }
 };
 
