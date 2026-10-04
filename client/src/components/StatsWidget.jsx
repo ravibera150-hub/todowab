@@ -58,7 +58,7 @@ const StatsWidget = () => {
             <span className="stat-value">
               {overdueTasks.length > 0
                 ? overdueTasks.length
-                : `${stats.totalFocusMinutes || 0}m`}
+                : `${stats.totalFocusMinutes || 0} minutes`}
             </span>
             <span className="stat-label">
               {overdueTasks.length > 0 ? 'Overdue' : 'Focus Time'}

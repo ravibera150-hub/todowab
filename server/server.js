@@ -31,13 +31,24 @@ const app = express();
 // ==========================================
 
 // CORS Setup - Allows frontend domain or development localhost
-const allowedOrigins = process.env.CLIENT_URL
-  ? [process.env.CLIENT_URL.replace(/\/$/, ''), 'http://localhost:5173', 'http://localhost:3000']
-  : '*';
-
+// CORS Setup - Allows frontend domain or development localhost
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (!process.env.CLIENT_URL || process.env.CLIENT_URL === '*') return callback(null, true);
+      const allowed = [
+        process.env.CLIENT_URL.replace(/\/$/, ''),
+        'http://localhost:5173',
+        'http://localhost:3000',
+        'http://localhost:5000',
+      ];
+      if (allowed.includes(origin) || origin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
@@ -58,13 +69,16 @@ app.use((req, res, next) => {
 // ==========================================
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
+const healthHandler = (req, res) => {
   res.status(200).json({
     status: 'online',
     message: 'WAD To-Do List Backend API is running smoothly',
     timestamp: new Date().toISOString(),
   });
-});
+};
+app.get('/api/health', healthHandler);
+app.get('/health', healthHandler);
+
 
 // Mount authentication routes
 app.use('/api/auth', require('./routes/authRoutes'));

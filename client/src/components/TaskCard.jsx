@@ -122,7 +122,7 @@ const TaskCard = ({
               title="Total Pomodoro focus time on this task"
             >
               <Flame size={12} />
-              <span>{task.pomodoroMinutes}m focused</span>
+              <span>{task.pomodoroMinutes} {task.pomodoroMinutes === 1 ? 'minute' : 'minutes'} focused</span>
             </div>
           )}
         </div>

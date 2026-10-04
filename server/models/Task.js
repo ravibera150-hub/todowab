@@ -86,6 +86,7 @@ const taskSchema = new mongoose.Schema(
 // Compound index for fast queries when filtering user's tasks by targetDate
 taskSchema.index({ userId: 1, targetDate: 1 });
 
-const Task = mongoose.model('Task', taskSchema);
+const Task = mongoose.models.Task || mongoose.model('Task', taskSchema);
 
 module.exports = Task;
+

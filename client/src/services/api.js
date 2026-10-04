@@ -11,8 +11,12 @@
  * - Provides modular methods: api.get(), api.post(), api.put(), api.delete().
  */
 
-const BASE_URL = import.meta.env.VITE_API_URL || '';
-const API_BASE_URL = BASE_URL ? `${BASE_URL.replace(/\/$/, '')}/api` : '/api';
+const RAW_URL = (import.meta.env.VITE_API_URL || '').trim().replace(/\/$/, '');
+let API_BASE_URL = '/api';
+
+if (RAW_URL) {
+  API_BASE_URL = RAW_URL.endsWith('/api') ? RAW_URL : `${RAW_URL}/api`;
+}
 
 /**
  * Universal request handler
@@ -33,9 +37,18 @@ async function request(endpoint, options = {}) {
     headers,
   };
 
+  // Prevent double /api/api if endpoint starts with /api
+  let cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  if (cleanEndpoint.startsWith('/api/') && API_BASE_URL.endsWith('/api')) {
+    cleanEndpoint = cleanEndpoint.replace('/api', '');
+  }
+
+  const targetUrl = `${API_BASE_URL}${cleanEndpoint}`;
+
   try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+    const response = await fetch(targetUrl, config);
     const data = await response.json().catch(() => ({}));
+
 
     if (!response.ok) {
       // If token expired or unauthorized, we can trigger custom event or message

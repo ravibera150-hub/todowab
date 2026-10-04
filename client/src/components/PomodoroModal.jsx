@@ -18,9 +18,9 @@ import { useTasks } from '../context/TaskContext';
 import { soundEffects } from '../utils/audio';
 
 const MODES = {
-  focus: { label: '25m Focus', minutes: 25 },
-  shortBreak: { label: '5m Break', minutes: 5 },
-  longBreak: { label: '15m Long Break', minutes: 15 },
+  focus: { label: '25 min Focus', minutes: 25 },
+  shortBreak: { label: '5 min Break', minutes: 5 },
+  longBreak: { label: '15 min Long Break', minutes: 15 },
 };
 
 const PomodoroModal = () => {
@@ -139,21 +139,21 @@ const PomodoroModal = () => {
               className={`mode-tab ${mode === 'focus' ? 'active' : ''}`}
               onClick={() => switchMode('focus')}
             >
-              25m Focus
+              25 min Focus
             </button>
             <button
               type="button"
               className={`mode-tab ${mode === 'shortBreak' ? 'active' : ''}`}
               onClick={() => switchMode('shortBreak')}
             >
-              5m Break
+              5 min Break
             </button>
             <button
               type="button"
               className={`mode-tab ${mode === 'longBreak' ? 'active' : ''}`}
               onClick={() => switchMode('longBreak')}
             >
-              15m Rest
+              15 min Rest
             </button>
           </div>
 

@@ -67,9 +67,10 @@ export const TaskProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
+      const todayDate = getTodayDateString();
       const [tasksRes, statsRes] = await Promise.all([
-        api.get('/tasks'),
-        api.get('/tasks/stats'),
+        api.get(`/tasks?date=${todayDate}`),
+        api.get(`/tasks/stats?date=${todayDate}`),
       ]);
 
       if (tasksRes.success) {

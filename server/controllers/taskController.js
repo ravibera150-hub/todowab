@@ -308,7 +308,7 @@ const deleteTask = async (req, res) => {
  */
 const getTaskStats = async (req, res) => {
   try {
-    const today = getFormattedDate();
+    const today = req.query.date || getFormattedDate();
 
     // Query today's tasks
     const todayTasks = await db.findTasks({
