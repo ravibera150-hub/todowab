@@ -49,20 +49,16 @@ const StatsWidget = () => {
           </div>
         </div>
 
-        {/* Overdue Tasks or Focus Time */}
+        {/* Dedicated Focus Time Stat */}
         <div className="stat-card">
-          <div className={`stat-icon-wrapper ${overdueTasks.length > 0 ? 'stat-icon-danger' : 'stat-icon-primary'}`}>
-            {overdueTasks.length > 0 ? <AlertCircle size={26} /> : <Flame size={26} />}
+          <div className="stat-icon-wrapper stat-icon-primary">
+            <Flame size={26} />
           </div>
           <div className="stat-info">
             <span className="stat-value">
-              {overdueTasks.length > 0
-                ? overdueTasks.length
-                : `${stats.totalFocusMinutes || 0} minutes`}
+              {stats.totalFocusMinutes || 0} minutes
             </span>
-            <span className="stat-label">
-              {overdueTasks.length > 0 ? 'Overdue' : 'Focus Time'}
-            </span>
+            <span className="stat-label">Focus Time</span>
           </div>
         </div>
       </div>
