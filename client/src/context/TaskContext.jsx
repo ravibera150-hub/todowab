@@ -233,7 +233,10 @@ export const TaskProvider = ({ children }) => {
     }
 
     const days = Math.floor(hours / 24);
-    return { text: `${days}d left`, isOverdue: false, isUrgent: false, diffMinutes };
+    if (days === 1) {
+      return { text: 'Due tomorrow', isOverdue: false, isUrgent: false, diffMinutes };
+    }
+    return { text: `Due in ${days} days`, isOverdue: false, isUrgent: false, diffMinutes };
   };
 
   // Check for overdue tasks to show banner alerts

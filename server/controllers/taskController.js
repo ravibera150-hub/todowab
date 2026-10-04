@@ -35,10 +35,10 @@ const getTodayTasks = async (req, res) => {
   try {
     const today = req.query.date || getFormattedDate();
 
-    // Query tasks belonging to this user where targetDate or dueDate matches today
+    // Query tasks scheduled for today or future upcoming dates
     const tasks = await db.findTasks({
       userId: req.user._id,
-      $or: [{ targetDate: today }, { dueDate: today }],
+      $or: [{ targetDate: { $gte: today } }, { dueDate: { $gte: today } }],
     });
 
     return res.status(200).json({
@@ -58,7 +58,7 @@ const getTodayTasks = async (req, res) => {
 };
 
 /**
- * @desc    Get only INCOMPLETE / PENDING tasks for today
+ * @desc    Get all INCOMPLETE / PENDING tasks (today & upcoming dates)
  * @route   GET /api/tasks/pending
  * @access  Private
  */
@@ -68,8 +68,8 @@ const getPendingTasks = async (req, res) => {
 
     const pendingTasks = await db.findTasks({
       userId: req.user._id,
-      $or: [{ targetDate: today }, { dueDate: today }],
       isCompleted: false,
+      $or: [{ targetDate: { $gte: today } }, { dueDate: { $gte: today } }],
     });
 
     return res.status(200).json({
