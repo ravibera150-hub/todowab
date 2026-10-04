@@ -27,6 +27,15 @@ import Navbar from '../components/Navbar';
 import TaskList from '../components/TaskList';
 
 const HistoryPage = () => {
+  // Helper to calculate today's date in YYYY-MM-DD
+  const getTodayString = () => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   // Helper to calculate yesterday's date in YYYY-MM-DD
   const getYesterdayString = () => {
     const d = new Date();
@@ -52,11 +61,12 @@ const HistoryPage = () => {
   useEffect(() => {
     const fetchPastDays = async () => {
       try {
-        const res = await api.get('/tasks/history');
+        const todayStr = getTodayString();
+        const res = await api.get(`/tasks/history?today=${todayStr}`);
         if (res.success && res.data) {
           setPastDaysList(res.data);
-          // If there are recorded past days, select the most recent one
-          if (res.data.length > 0 && !res.data.some((d) => d.date === selectedDate)) {
+          // Select the most recent past day if recorded
+          if (res.data.length > 0) {
             setSelectedDate(res.data[0].date);
           }
         }
@@ -134,7 +144,7 @@ const HistoryPage = () => {
                   type="date"
                   className="date-picker-input"
                   value={selectedDate}
-                  max={getYesterdayString()}
+                  max={getTodayString()}
                   onChange={(e) => setSelectedDate(e.target.value)}
                 />
               </div>

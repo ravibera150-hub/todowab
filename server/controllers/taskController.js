@@ -95,7 +95,7 @@ const getPendingTasks = async (req, res) => {
  */
 const getHistoryTasks = async (req, res) => {
   try {
-    const today = getFormattedDate();
+    const today = req.query.today || req.query.currentDate || getFormattedDate();
     const requestedDate = req.query.date;
 
     // Case 1: Specific date requested (e.g. /api/tasks/history?date=2026-08-10)
@@ -126,13 +126,14 @@ const getHistoryTasks = async (req, res) => {
     // Case 2: No specific date — return aggregated list of past dates with metrics
     const allUserTasks = await db.findTasks({
       userId: req.user._id,
-      targetDate: { $lt: today }, // only dates strictly before today
+      $or: [{ targetDate: { $lt: today } }, { dueDate: { $lt: today } }],
     });
 
-    // Group tasks by targetDate
+    // Group tasks by targetDate or dueDate
     const dateGroups = {};
     allUserTasks.forEach((task) => {
       const d = task.targetDate || task.dueDate;
+      if (!d || d >= today) return;
       if (!dateGroups[d]) {
         dateGroups[d] = {
           date: d,
@@ -151,14 +152,16 @@ const getHistoryTasks = async (req, res) => {
       dateGroups[d].tasks.push(task);
     });
 
-    const pastDays = Object.values(dateGroups).map((group) => ({
-      date: group.date,
-      total: group.total,
-      completed: group.completed,
-      incomplete: group.incomplete,
-      completionRate: Math.round((group.completed / group.total) * 100),
-      tasks: group.tasks,
-    }));
+    const pastDays = Object.values(dateGroups)
+      .map((group) => ({
+        date: group.date,
+        total: group.total,
+        completed: group.completed,
+        incomplete: group.incomplete,
+        completionRate: Math.round((group.completed / group.total) * 100),
+        tasks: group.tasks,
+      }))
+      .sort((a, b) => b.date.localeCompare(a.date));
 
     return res.status(200).json({
       success: true,
@@ -191,9 +194,9 @@ const createTask = async (req, res) => {
       });
     }
 
-    const today = getFormattedDate();
+    const today = req.query.date || getFormattedDate();
     const resolvedDueDate = dueDate || today;
-    const resolvedTargetDate = targetDate || today;
+    const resolvedTargetDate = targetDate || dueDate || today;
 
     const newTask = await db.createTask({
       userId: req.user._id,
