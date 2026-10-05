@@ -193,6 +193,17 @@ button {
   }
 }
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes pulseGlow {
   0%, 100% {
     box-shadow: 0 0 0 0 var(--primary-glow);
@@ -228,6 +239,38 @@ button {
   animation: fadeIn 0.3s ease-out forwards;
 }
 
+.animate-slide-down {
+  animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .animate-scale-in {
   animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Base Responsive Safeguards */
+img, svg, canvas, video {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+  
+  button, input, select, textarea, a {
+    touch-action: manipulation;
+  }
+
+  /* Utility class to hide text labels on mobile while preserving icons */
+  .btn-text-mobile-hide {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+}
+

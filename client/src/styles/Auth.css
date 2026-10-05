@@ -188,3 +188,30 @@
   background-color: var(--primary-light);
   border-color: var(--primary);
 }
+
+/* Responsive Auth Pages */
+@media (max-width: 480px) {
+  .auth-wrapper {
+    padding: 1.25rem 0.85rem;
+  }
+
+  .auth-card {
+    padding: 1.5rem 1.15rem;
+    border-radius: var(--radius-md);
+  }
+
+  .auth-title {
+    font-size: 1.35rem;
+  }
+
+  .auth-bg-blob-1 {
+    width: 220px;
+    height: 220px;
+  }
+
+  .auth-bg-blob-2 {
+    width: 240px;
+    height: 240px;
+  }
+}
+

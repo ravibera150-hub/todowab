@@ -103,9 +103,10 @@ const Navbar = ({ onOpenAddTask }) => {
               className="btn btn-primary btn-sm"
               onClick={onOpenAddTask}
               title="Add New Task"
+              aria-label="Add Task"
             >
               <Plus size={16} />
-              <span>Add Task</span>
+              <span className="btn-text-mobile-hide">Add Task</span>
             </button>
           )}
 
@@ -114,6 +115,7 @@ const Navbar = ({ onOpenAddTask }) => {
             className="btn-icon"
             onClick={toggleTheme}
             title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            aria-label="Toggle Theme"
           >
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -124,16 +126,17 @@ const Navbar = ({ onOpenAddTask }) => {
               <div className="user-avatar">
                 {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
               </div>
-              <span style={{ maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <span className="user-name-text" style={{ maxWidth: '90px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {user.name}
               </span>
               <button
                 onClick={handleLogout}
                 className="btn-icon"
-                style={{ width: '28px', height: '28px', border: 'none', background: 'transparent' }}
+                style={{ width: '24px', height: '24px', border: 'none', background: 'transparent' }}
                 title="Logout"
+                aria-label="Logout"
               >
-                <LogOut size={16} color="var(--danger)" />
+                <LogOut size={15} color="var(--danger)" />
               </button>
             </div>
           )}
@@ -142,58 +145,63 @@ const Navbar = ({ onOpenAddTask }) => {
           <button
             className="btn-icon mobile-menu-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer & Backdrop */}
       {mobileMenuOpen && (
-        <div className="mobile-drawer animate-fade-in">
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-            onClick={closeMobile}
-          >
-            <LayoutDashboard size={18} />
-            <span>Dashboard</span>
-          </NavLink>
-          <NavLink
-            to="/pending"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-            onClick={closeMobile}
-          >
-            <Clock size={18} />
-            <span>Pending Tasks</span>
-            {stats.pending > 0 && <span className="nav-badge warning">{stats.pending}</span>}
-          </NavLink>
-          <NavLink
-            to="/history"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-            onClick={closeMobile}
-          >
-            <History size={18} />
-            <span>Previous History</span>
-          </NavLink>
-          <NavLink
-            to="/profile"
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-            onClick={closeMobile}
-          >
-            <User size={18} />
-            <span>Profile & Account</span>
-          </NavLink>
-          <button
-            onClick={handleLogout}
-            className="btn btn-danger btn-sm"
-            style={{ marginTop: '0.5rem', width: '100%' }}
-          >
-            <LogOut size={16} />
-            <span>Logout</span>
-          </button>
-        </div>
+        <>
+          <div className="mobile-drawer-backdrop" onClick={closeMobile} />
+          <div className="mobile-drawer animate-slide-down">
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+              onClick={closeMobile}
+            >
+              <LayoutDashboard size={18} />
+              <span>Dashboard</span>
+            </NavLink>
+            <NavLink
+              to="/pending"
+              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+              onClick={closeMobile}
+            >
+              <Clock size={18} />
+              <span>Pending Tasks</span>
+              {stats.pending > 0 && <span className="nav-badge warning">{stats.pending}</span>}
+            </NavLink>
+            <NavLink
+              to="/history"
+              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+              onClick={closeMobile}
+            >
+              <History size={18} />
+              <span>Previous History</span>
+            </NavLink>
+            <NavLink
+              to="/profile"
+              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+              onClick={closeMobile}
+            >
+              <User size={18} />
+              <span>Profile & Account</span>
+            </NavLink>
+            <button
+              onClick={handleLogout}
+              className="btn btn-danger btn-sm"
+              style={{ marginTop: '0.5rem', width: '100%' }}
+            >
+              <LogOut size={16} />
+              <span>Logout</span>
+            </button>
+          </div>
+        </>
       )}
+
     </header>
   );
 };
