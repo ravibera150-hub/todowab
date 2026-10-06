@@ -1,13 +1,13 @@
 # TaskFlow — Full-Stack To-Do List Web Application
 
 > **Academic Project for Web Application Development (WAD)**  
-> Built with **React.js (Custom CSS)**, **Node.js**, **Express.js**, **MongoDB (Mongoose)**, **JWT Authentication**, and **Real-Time Timers**.
+> Built with **React.js**, **Bootstrap 5 & Custom CSS**, **Node.js**, **Express.js**, **MongoDB (Mongoose)**, **JWT Authentication**, and **Automated Unit Testing (`npm test`)**.
 
 ---
 
 ## 📌 Project Overview
 
-**TaskFlow** is a modern, responsive full-stack task manager designed to help users track, organize, and complete their daily tasks. It features real-time countdown timers, Pomodoro focus integration, past-day historical performance tracking, visual completion stats, and multi-user JWT authentication.
+**TaskFlow** is a modern, responsive full-stack task manager designed to help users track, organize, and complete their daily tasks. It features real-time countdown timers, Pomodoro focus integration, past-day historical performance tracking, visual completion stats, multi-user JWT authentication, Bootstrap 5 responsive layout, and automated unit testing.
 
 ---
 
@@ -16,10 +16,11 @@
 | Layer | Technology | Details |
 | :--- | :--- | :--- |
 | **Frontend** | **React.js (v18+)** | Functional Components, Custom Hooks, Context API |
-| **Styling** | **100% Vanilla CSS** | Custom CSS Design System, CSS Variables, Glassmorphism, Dark/Light Themes *(No Tailwind/Bootstrap)* |
+| **Styling** | **Bootstrap 5 & Custom CSS** | Bootstrap 5 CDN Grid & Utilities, Custom CSS Design System, Glassmorphism, Dark/Light Themes |
 | **Backend** | **Node.js & Express.js** | RESTful API, Route Modularization, Middleware Architecture |
 | **Database** | **MongoDB & Mongoose** | Schema Validation, Foreign Key References, Indexing *(with automatic local JSON DB fallback)* |
 | **Authentication** | **JWT & bcryptjs** | Salted password hashing (10 rounds), Stateless Bearer Token Authorization |
+| **Testing** | **Node.js Test Runner (`node --test`)** | Automated unit & integration tests (`npm test`) for Auth, JWT, Schemas, & CRUD |
 | **Audio** | **Web Audio API** | Programmatic in-browser sound synthesis for task and timer alerts *(100% offline)* |
 
 ---

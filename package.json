@@ -9,6 +9,7 @@
     "server": "cd server && npm run dev",
     "client": "cd client && npm run dev",
     "start": "cd server && npm start",
+    "test": "cd server && npm test",
     "build": "cd client && npx vite build --outDir ../dist",
     "vercel-build": "cd client && npx vite build --outDir ../dist",
     "postinstall": "cd client && npm install"
