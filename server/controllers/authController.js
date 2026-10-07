@@ -15,6 +15,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../data/dbAdapter');
+const { sendOtpEmail } = require('../utils/sendEmail');
 
 /**
  * Helper function to generate a signed JSON Web Token (JWT)
@@ -331,10 +332,12 @@ const sendOtp = async (req, res) => {
 
     await db.saveUserOtp(email, otp, 10); // OTP valid for 10 minutes
 
+    // Send real email with OTP to user's email address
+    await sendOtpEmail({ toEmail: email, otpCode: otp });
+
     return res.status(200).json({
       success: true,
-      message: `OTP Code generated: ${otp}`,
-      otp,
+      message: 'A 6-digit OTP verification code has been sent to your email address.',
     });
   } catch (error) {
     console.error('Send OTP Error:', error);

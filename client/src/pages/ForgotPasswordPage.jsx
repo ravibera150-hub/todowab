@@ -129,42 +129,24 @@ const ForgotPasswordPage = () => {
           </div>
         )}
 
-        {/* Demo OTP Banner when generated */}
-        {step === 2 && generatedOtp && (
+        {/* Success message banner when OTP sent */}
+        {step === 2 && successMsg && (
           <div
             style={{
               padding: '0.85rem 1rem',
-              backgroundColor: 'var(--warning-light)',
-              border: '1px solid rgba(245, 158, 11, 0.4)',
+              backgroundColor: 'var(--success-light)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
               borderRadius: 'var(--radius-md)',
-              color: 'var(--warning)',
+              color: 'var(--success)',
               fontSize: '0.875rem',
               marginBottom: '1.25rem',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
               gap: '0.5rem',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <ShieldCheck size={18} />
-              <span>
-                Your 6-Digit OTP Code is: <strong>{generatedOtp}</strong>
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setOtp(generatedOtp)}
-              className="btn btn-sm"
-              style={{
-                backgroundColor: 'var(--warning)',
-                color: 'white',
-                fontSize: '0.75rem',
-                padding: '0.2rem 0.6rem',
-              }}
-            >
-              Auto-fill OTP
-            </button>
+            <CheckCircle2 size={18} />
+            <span>{successMsg}</span>
           </div>
         )}
 
