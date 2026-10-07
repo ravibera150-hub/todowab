@@ -2,17 +2,16 @@
  * =========================================================================
  * Login Page Component (pages/LoginPage.jsx)
  * =========================================================================
- * User sign-in page with instant validation, forgot password link,
- * and device-isolated instant demo mode.
+ * User sign-in page with instant validation and forgot password link.
  */
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CheckSquare, Mail, Lock, Eye, EyeOff, AlertCircle, Sparkles } from 'lucide-react';
+import { CheckSquare, Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
-  const { login, demoLogin } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -34,26 +33,6 @@ const LoginPage = () => {
     } else {
       setError(res.message);
     }
-  };
-
-  // Device-isolated demo login (No cross-mobile history leakage!)
-  const handleInstantDemo = async () => {
-    setError('');
-    setSubmitting(true);
-    const res = await demoLogin();
-    setSubmitting(false);
-
-    if (res.success) {
-      navigate('/dashboard');
-    } else {
-      setError(res.message);
-    }
-  };
-
-  // Autofill static demo user
-  const handleDemoFill = () => {
-    setEmail('demo@wad.edu');
-    setPassword('wad123456');
   };
 
   return (
@@ -147,29 +126,6 @@ const LoginPage = () => {
             disabled={submitting}
           >
             {submitting ? 'Signing in...' : 'Sign In'}
-          </button>
-
-          {/* Device Isolated Demo Login Button */}
-          <button
-            type="button"
-            className="demo-badge-btn"
-            onClick={handleInstantDemo}
-            disabled={submitting}
-            title="Instant Demo Session isolated specifically for your mobile device"
-          >
-            <Sparkles size={15} />
-            <span>🚀 Instant Isolated Demo Mode</span>
-          </button>
-
-          {/* Demo Credentials Autofill Helper */}
-          <button
-            type="button"
-            className="demo-badge-btn"
-            onClick={handleDemoFill}
-            style={{ borderStyle: 'dotted', opacity: 0.8 }}
-            title="Auto-fill sample login credentials"
-          >
-            <span>Fill Sample Credentials (demo@wad.edu)</span>
           </button>
         </form>
 

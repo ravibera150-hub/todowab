@@ -22,6 +22,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useTasks } from '../context/TaskContext';
 import Navbar from '../components/Navbar';
+import MobileBottomNav from '../components/MobileBottomNav';
 
 const ProfilePage = () => {
   const { user, logout } = useAuth();
@@ -166,6 +167,9 @@ const ProfilePage = () => {
           </div>
         </div>
       </main>
+
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav />
 
       <footer className="app-footer">
         TaskFlow — WAD Academic Full-Stack To-Do List Application

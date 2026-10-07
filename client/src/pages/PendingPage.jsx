@@ -14,6 +14,7 @@ import TaskList from '../components/TaskList';
 import TaskForm from '../components/TaskForm';
 import PomodoroModal from '../components/PomodoroModal';
 import NotificationBanner from '../components/NotificationBanner';
+import MobileBottomNav from '../components/MobileBottomNav';
 
 const PendingPage = () => {
   const { tasks, loading, stats } = useTasks();
@@ -147,6 +148,9 @@ const PendingPage = () => {
 
       {/* Pomodoro Focus Timer Modal */}
       <PomodoroModal />
+
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav onOpenAddTask={handleOpenCreate} />
 
       <footer className="app-footer">
         TaskFlow — WAD Academic Full-Stack To-Do List Application

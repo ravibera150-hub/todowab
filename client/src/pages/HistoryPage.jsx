@@ -25,6 +25,7 @@ import {
 import { api } from '../services/api';
 import Navbar from '../components/Navbar';
 import TaskList from '../components/TaskList';
+import MobileBottomNav from '../components/MobileBottomNav';
 
 const HistoryPage = () => {
   // Helper to calculate today's date in YYYY-MM-DD
@@ -264,6 +265,9 @@ const HistoryPage = () => {
           </section>
         </div>
       </main>
+
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav />
 
       <footer className="app-footer">
         TaskFlow — WAD Academic Full-Stack To-Do List Application

@@ -17,6 +17,7 @@ import TaskList from '../components/TaskList';
 import TaskForm from '../components/TaskForm';
 import PomodoroModal from '../components/PomodoroModal';
 import NotificationBanner from '../components/NotificationBanner';
+import MobileBottomNav from '../components/MobileBottomNav';
 
 const DashboardPage = () => {
   const { user } = useAuth();
@@ -158,6 +159,9 @@ const DashboardPage = () => {
 
       {/* Pomodoro Focus Timer Modal */}
       <PomodoroModal />
+
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav onOpenAddTask={handleOpenCreate} />
 
       {/* Footer */}
       <footer className="app-footer">
