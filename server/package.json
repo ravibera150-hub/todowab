@@ -1,7 +1,6 @@
 {
   "name": "wad-todolist-server",
   "version": "1.0.0",
-  "type": "module",
   "description": "Backend API for WAD Academic Full-Stack To-Do List Application",
   "main": "server.js",
   "scripts": {
