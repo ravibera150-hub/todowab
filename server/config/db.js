@@ -36,14 +36,14 @@ const connectDB = async () => {
 
   // 3. Initiate or return existing connection promise
   if (!cached.promise) {
-    cached.promise = mongoose
-      .connect(mongoURI, {
-        bufferCommands: false,
-      })
-      .then((m) => {
-        console.log(`✅ MongoDB Connected Successfully: ${m.connection.host}`);
-        return m;
-      });
+    const opts = {
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
+    };
+    cached.promise = mongoose.connect(mongoURI, opts).then((m) => {
+      console.log(`✅ MongoDB Connected Successfully: ${m.connection.host}`);
+      return m;
+    });
   }
 
   try {
@@ -60,19 +60,17 @@ const connectDB = async () => {
       try {
         console.log('🔄 Local DNS SRV resolution blocked, switching to Google DNS (8.8.8.8)...');
         dns.setServers(['8.8.8.8', '8.8.4.4']);
-        const conn = await mongoose.connect(mongoURI);
+        const conn = await mongoose.connect(mongoURI, { serverSelectionTimeoutMS: 10000 });
         console.log(`✅ MongoDB Connected Successfully via Google DNS: ${conn.connection.host}`);
         cached.conn = conn;
         return conn;
       } catch (dnsError) {
         console.error(`❌ MongoDB Connection Error: ${dnsError.message}`);
-        if (!process.env.VERCEL) process.exit(1);
         throw dnsError;
       }
     }
 
     console.error(`❌ MongoDB Connection Error: ${firstError.message}`);
-    if (!process.env.VERCEL) process.exit(1);
     throw firstError;
   }
 };
