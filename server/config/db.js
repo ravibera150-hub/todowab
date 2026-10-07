@@ -15,14 +15,12 @@ if (!cached) {
 }
 
 const connectDB = async () => {
-  const mongoURI = process.env.MONGO_URI;
+  const mongoURI =
+    process.env.MONGO_URI ||
+    'mongodb+srv://wed_user:xDImVgK6a1zyI0rG@cluster0.inelkxr.mongodb.net/wad_todolist?retryWrites=true&w=majority';
 
   if (!mongoURI) {
     console.error('❌ FATAL ERROR: MONGO_URI environment variable is missing.');
-    console.error('👉 Please set MONGO_URI in your environment variables on Render/Railway/Vercel.');
-    if (!process.env.VERCEL) {
-      process.exit(1);
-    }
     return null;
   }
 
