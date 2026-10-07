@@ -11,8 +11,6 @@ server/.env
 client/.env
 
 # Build outputs
-dist/
-client/dist/
 build/
 
 # Local data & temporary files
