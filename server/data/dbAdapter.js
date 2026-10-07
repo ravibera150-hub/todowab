@@ -36,6 +36,39 @@ const dbAdapter = {
     return await User.findByIdAndUpdate(id, { password: newHashedPassword }, { new: true });
   },
 
+  async saveUserOtp(email, otp, expireMinutes = 10) {
+    const cleanEmail = email.toLowerCase().trim();
+    const expireDate = new Date(Date.now() + expireMinutes * 60 * 1000);
+    return await User.findOneAndUpdate(
+      { email: cleanEmail },
+      { resetOtp: String(otp), resetOtpExpire: expireDate },
+      { new: true }
+    );
+  },
+
+  async verifyAndResetUserPassword(email, inputOtp, newHashedPassword) {
+    const cleanEmail = email.toLowerCase().trim();
+    const user = await User.findOne({ email: cleanEmail });
+    if (!user) {
+      return { success: false, message: 'Account not found with this email' };
+    }
+
+    if (!user.resetOtp || String(user.resetOtp).trim() !== String(inputOtp).trim()) {
+      return { success: false, message: 'Invalid OTP code. Please check and try again.' };
+    }
+
+    if (!user.resetOtpExpire || new Date() > new Date(user.resetOtpExpire)) {
+      return { success: false, message: 'OTP code has expired. Please request a new OTP.' };
+    }
+
+    user.password = newHashedPassword;
+    user.resetOtp = null;
+    user.resetOtpExpire = null;
+    await user.save();
+
+    return { success: true, message: 'Password reset successfully!' };
+  },
+
   // ==========================================
   // TASK METHODS
   // ==========================================

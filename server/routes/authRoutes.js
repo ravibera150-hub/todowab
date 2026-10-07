@@ -12,13 +12,15 @@
 
 const express = require('express');
 const router = express.Router();
-const { signup, login, getProfile, forgotPassword, demoLogin } = require('../controllers/authController');
+const { signup, login, getProfile, forgotPassword, sendOtp, verifyOtpReset, demoLogin } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 
 // Public routes
 router.post('/signup', signup);
 router.post('/login', login);
 router.post('/forgot-password', forgotPassword);
+router.post('/send-otp', sendOtp);
+router.post('/verify-otp-reset', verifyOtpReset);
 router.post('/demo', demoLogin);
 
 // Protected routes (require valid JWT)

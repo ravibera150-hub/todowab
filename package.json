@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Full-Stack To-Do List Web Application for Academic WAD Project",
   "scripts": {
+    "dev": "npm run client",
     "install:server": "cd server && npm install",
     "install:client": "cd client && npm install",
     "install:all": "npm run install:server && npm run install:client",

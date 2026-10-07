@@ -112,6 +112,32 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Handle sending OTP code
+  const sendOtp = async (email) => {
+    try {
+      const data = await api.post('/auth/send-otp', { email });
+      if (data.success) {
+        return { success: true, message: data.message, otp: data.otp };
+      }
+      return { success: false, message: data.message || 'Failed to send OTP' };
+    } catch (error) {
+      return { success: false, message: error.message || 'Failed to send OTP' };
+    }
+  };
+
+  // Handle verifying OTP and resetting password
+  const verifyOtpReset = async (email, otp, newPassword) => {
+    try {
+      const data = await api.post('/auth/verify-otp-reset', { email, otp, newPassword });
+      if (data.success) {
+        return { success: true, message: data.message };
+      }
+      return { success: false, message: data.message || 'OTP verification failed' };
+    } catch (error) {
+      return { success: false, message: error.message || 'OTP verification failed' };
+    }
+  };
+
   // Handle user logout
   const logout = () => {
     localStorage.removeItem('wad_todo_token');
@@ -128,6 +154,8 @@ export const AuthProvider = ({ children }) => {
     signup,
     demoLogin,
     forgotPassword,
+    sendOtp,
+    verifyOtpReset,
     logout,
   };
 

@@ -302,11 +302,105 @@ const demoLogin = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Send OTP code for password reset
+ * @route   POST /api/auth/send-otp
+ * @access  Public
+ */
+const sendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a registered email address',
+      });
+    }
+
+    const user = await db.findUserByEmail(email);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'No account found with this email address',
+      });
+    }
+
+    // Generate random 6-digit OTP code
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    await db.saveUserOtp(email, otp, 10); // OTP valid for 10 minutes
+
+    return res.status(200).json({
+      success: true,
+      message: `OTP Code generated: ${otp}`,
+      otp,
+    });
+  } catch (error) {
+    console.error('Send OTP Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error generating OTP',
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * @desc    Verify OTP code & Reset Password
+ * @route   POST /api/auth/verify-otp-reset
+ * @access  Public
+ */
+const verifyOtpReset = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide email, OTP code, and new password',
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'New password must be at least 6 characters long',
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    const result = await db.verifyAndResetUserPassword(email, otp, hashedPassword);
+    if (!result.success) {
+      return res.status(400).json({
+        success: false,
+        message: result.message,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'OTP verified and password reset successfully! You can now sign in.',
+    });
+  } catch (error) {
+    console.error('Verify OTP Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error resetting password with OTP',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   signup,
   login,
   getProfile,
   forgotPassword,
+  sendOtp,
+  verifyOtpReset,
   demoLogin,
 };
 
