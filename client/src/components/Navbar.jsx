@@ -122,17 +122,24 @@ const Navbar = ({ onOpenAddTask }) => {
 
           {/* User Info & Logout Pill */}
           {user && (
-            <div className="user-menu-pill" title={`Logged in as ${user.email}`}>
+            <div
+              className="user-menu-pill"
+              title={`Logged in as ${user.email}`}
+              onClick={() => navigate('/profile')}
+              style={{ cursor: 'pointer' }}
+            >
               <div className="user-avatar">
                 {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
               </div>
-              <span className="user-name-text" style={{ maxWidth: '90px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <span className="user-name-text">
                 {user.name}
               </span>
               <button
-                onClick={handleLogout}
-                className="btn-icon"
-                style={{ width: '24px', height: '24px', border: 'none', background: 'transparent' }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleLogout();
+                }}
+                className="user-logout-btn btn-icon"
                 title="Logout"
                 aria-label="Logout"
               >

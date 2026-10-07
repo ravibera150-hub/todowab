@@ -2,7 +2,8 @@
  * =========================================================================
  * Login Page Component (pages/LoginPage.jsx)
  * =========================================================================
- * User sign-in page with instant validation and demo account autofill.
+ * User sign-in page with instant validation, forgot password link,
+ * and device-isolated instant demo mode.
  */
 
 import React, { useState } from 'react';
@@ -11,7 +12,7 @@ import { CheckSquare, Mail, Lock, Eye, EyeOff, AlertCircle, Sparkles } from 'luc
 import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
-  const { login } = useAuth();
+  const { login, demoLogin } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -35,7 +36,21 @@ const LoginPage = () => {
     }
   };
 
-  // Demo filler for quick viva demo presentation
+  // Device-isolated demo login (No cross-mobile history leakage!)
+  const handleInstantDemo = async () => {
+    setError('');
+    setSubmitting(true);
+    const res = await demoLogin();
+    setSubmitting(false);
+
+    if (res.success) {
+      navigate('/dashboard');
+    } else {
+      setError(res.message);
+    }
+  };
+
+  // Autofill static demo user
   const handleDemoFill = () => {
     setEmail('demo@wad.edu');
     setPassword('wad123456');
@@ -89,11 +104,16 @@ const LoginPage = () => {
             </div>
           </div>
 
-          {/* Password */}
+          {/* Password & Forgot Password Link */}
           <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label" htmlFor="login-password">
-              Password
-            </label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <label className="form-label" htmlFor="login-password">
+                Password
+              </label>
+              <Link to="/forgot-password" className="auth-forgot-link">
+                Forgot password?
+              </Link>
+            </div>
             <div className="input-with-icon">
               <span className="input-icon-left">
                 <Lock size={18} />
@@ -129,15 +149,27 @@ const LoginPage = () => {
             {submitting ? 'Signing in...' : 'Sign In'}
           </button>
 
-          {/* Viva Demo Fill Button */}
+          {/* Device Isolated Demo Login Button */}
+          <button
+            type="button"
+            className="demo-badge-btn"
+            onClick={handleInstantDemo}
+            disabled={submitting}
+            title="Instant Demo Session isolated specifically for your mobile device"
+          >
+            <Sparkles size={15} />
+            <span>🚀 Instant Isolated Demo Mode</span>
+          </button>
+
+          {/* Demo Credentials Autofill Helper */}
           <button
             type="button"
             className="demo-badge-btn"
             onClick={handleDemoFill}
-            title="Auto-fill with sample credentials for Viva demo"
+            style={{ borderStyle: 'dotted', opacity: 0.8 }}
+            title="Auto-fill sample login credentials"
           >
-            <Sparkles size={14} />
-            <span>Fill Demo Credentials (demo@wad.edu)</span>
+            <span>Fill Sample Credentials (demo@wad.edu)</span>
           </button>
         </form>
 

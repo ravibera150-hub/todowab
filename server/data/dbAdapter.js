@@ -32,6 +32,10 @@ const dbAdapter = {
     });
   },
 
+  async updateUserPassword(id, newHashedPassword) {
+    return await User.findByIdAndUpdate(id, { password: newHashedPassword }, { new: true });
+  },
+
   // ==========================================
   // TASK METHODS
   // ==========================================

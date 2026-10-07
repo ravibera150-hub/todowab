@@ -181,8 +181,132 @@ const getProfile = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Forgot / Reset password
+ * @route   POST /api/auth/forgot-password
+ * @access  Public
+ */
+const forgotPassword = async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+
+    if (!email || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide email and new password',
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'New password must be at least 6 characters long',
+      });
+    }
+
+    const user = await db.findUserByEmail(email);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'No account found with this email address',
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await db.updateUserPassword(user._id, hashedPassword);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Password reset successfully. You can now log in with your new password.',
+    });
+  } catch (error) {
+    console.error('Forgot Password Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error during password reset',
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * @desc    Device-isolated Demo Login
+ * @route   POST /api/auth/demo
+ * @access  Public
+ */
+const demoLogin = async (req, res) => {
+  try {
+    const { deviceId } = req.body;
+    const cleanDeviceId = deviceId
+      ? String(deviceId).toLowerCase().trim().replace(/[^a-z0-9]/g, '')
+      : Math.random().toString(36).substring(2, 8);
+    
+    const demoEmail = `demo_${cleanDeviceId}@wad.edu`;
+    const demoName = `Demo User`;
+
+    let user = await db.findUserByEmail(demoEmail);
+    if (!user) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash('demo_wad_pass_2026', salt);
+
+      user = await db.createUser({
+        name: demoName,
+        email: demoEmail,
+        password: hashedPassword,
+      });
+
+      // Seed initial starter tasks for this fresh device-isolated demo session!
+      const todayStr = new Date().toISOString().split('T')[0];
+      await db.createTask({
+        userId: user._id,
+        title: '👋 Welcome to your private TaskFlow Demo!',
+        description: 'This demo workspace is isolated for your device. Tasks created here will not appear on other devices.',
+        category: 'Personal',
+        priority: 'High',
+        date: todayStr,
+        isCompleted: false,
+      });
+      await db.createTask({
+        userId: user._id,
+        title: '✅ Try completing a task',
+        description: 'Click the checkbox on the left to mark tasks as completed.',
+        category: 'Work',
+        priority: 'Medium',
+        date: todayStr,
+        isCompleted: true,
+      });
+    }
+
+    const token = generateToken(user._id);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Logged in to device-isolated demo account',
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (error) {
+    console.error('Demo Login Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error during demo login',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   signup,
   login,
   getProfile,
+  forgotPassword,
+  demoLogin,
 };
+

@@ -78,6 +78,40 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Handle device-isolated demo login
+  const demoLogin = async () => {
+    try {
+      let deviceId = localStorage.getItem('wad_demo_device_id');
+      if (!deviceId) {
+        deviceId = 'dev_' + Math.random().toString(36).substring(2, 11) + Date.now().toString(36);
+        localStorage.setItem('wad_demo_device_id', deviceId);
+      }
+      const data = await api.post('/auth/demo', { deviceId });
+      if (data.success && data.token) {
+        localStorage.setItem('wad_todo_token', data.token);
+        setToken(data.token);
+        setUser(data.user);
+        return { success: true, message: data.message };
+      }
+      return { success: false, message: data.message || 'Demo login failed' };
+    } catch (error) {
+      return { success: false, message: error.message || 'Demo login failed' };
+    }
+  };
+
+  // Handle forgot password
+  const forgotPassword = async (email, newPassword) => {
+    try {
+      const data = await api.post('/auth/forgot-password', { email, newPassword });
+      if (data.success) {
+        return { success: true, message: data.message };
+      }
+      return { success: false, message: data.message || 'Password reset failed' };
+    } catch (error) {
+      return { success: false, message: error.message || 'Password reset failed' };
+    }
+  };
+
   // Handle user logout
   const logout = () => {
     localStorage.removeItem('wad_todo_token');
@@ -92,6 +126,8 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: Boolean(token && user),
     login,
     signup,
+    demoLogin,
+    forgotPassword,
     logout,
   };
 
